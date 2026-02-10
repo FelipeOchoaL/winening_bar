@@ -1,0 +1,34 @@
+{% extends "pagos/base.html" %}
+
+{% block title %}Pago {{ pago.referencia|truncatechars:13 }} — Winening{% endblock %}
+
+{% block content %}
+<h1>Detalle del Pago</h1>
+<br>
+<div class="card">
+    <table>
+        <tr><th>ID</th><td>{{ pago.pk }}</td></tr>
+        <tr><th>Referencia</th><td>{{ pago.referencia }}</td></tr>
+        <tr><th>Monto</th><td>${{ pago.monto }}</td></tr>
+        <tr><th>Método</th><td>{{ pago.get_metodo_pago_display }}</td></tr>
+        <tr>
+            <th>Estado</th>
+            <td><span class="badge badge-{{ pago.estado }}">{{ pago.get_estado_display }}</span></td>
+        </tr>
+        <tr><th>Creado</th><td>{{ pago.created_at|date:"d/m/Y H:i:s" }}</td></tr>
+        <tr><th>Actualizado</th><td>{{ pago.updated_at|date:"d/m/Y H:i:s" }}</td></tr>
+    </table>
+</div>
+
+<div style="margin-top:1rem;">
+    {% if pago.estado == 'pendiente' %}
+        <a href="{% url 'pagos:procesar_pago' pago.pk %}" class="btn btn-primary">Procesar</a>
+        <a href="{% url 'pagos:cancelar_pago' pago.pk %}" class="btn btn-danger">Cancelar</a>
+    {% elif pago.estado == 'en_proceso' %}
+        <a href="{% url 'pagos:confirmar_pago' pago.pk %}" class="btn btn-success">Confirmar</a>
+        <a href="{% url 'pagos:cancelar_pago' pago.pk %}" class="btn btn-danger">Cancelar</a>
+    {% endif %}
+    <a href="{% url 'pagos:lista_pagos' %}" class="btn btn-secondary">Volver</a>
+</div>
+{% endblock %}
+

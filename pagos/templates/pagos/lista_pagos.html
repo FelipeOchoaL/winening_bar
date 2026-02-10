@@ -1,0 +1,40 @@
+{% extends "pagos/base.html" %}
+
+{% block title %}Lista de Pagos — Winening{% endblock %}
+
+{% block content %}
+<h1>Pagos</h1>
+<br>
+
+{% if pagos %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Monto</th>
+                <th>Método</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pago in pagos %}
+            <tr>
+                <td><a href="{% url 'pagos:detalle_pago' pago.pk %}">{{ pago.referencia|truncatechars:13 }}</a></td>
+                <td>${{ pago.monto }}</td>
+                <td>{{ pago.get_metodo_pago_display }}</td>
+                <td><span class="badge badge-{{ pago.estado }}">{{ pago.get_estado_display }}</span></td>
+                <td>{{ pago.created_at|date:"d/m/Y H:i" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No hay pagos registrados aún. <a href="{% url 'pagos:crear_pago' %}">Crear uno</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
+

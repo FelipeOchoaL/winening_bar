@@ -1,0 +1,28 @@
+{% extends "pagos/base.html" %}
+
+{% block title %}Nuevo Pago — Winening{% endblock %}
+
+{% block content %}
+<h1>Crear Pago</h1>
+<br>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="monto">Monto ($)</label>
+            <input type="number" name="monto" id="monto" step="0.01" min="0.01" required>
+        </div>
+        <div class="form-group">
+            <label for="metodo_pago">Método de Pago</label>
+            <select name="metodo_pago" id="metodo_pago">
+                {% for value, label in metodos %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Pago</button>
+        <a href="{% url 'pagos:lista_pagos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
