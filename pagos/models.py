@@ -70,13 +70,12 @@ class Pago(models.Model):
     # ── Acciones públicas ──────────────────────────────────────────
     def procesar_pago(self) -> dict:
         """
-        Mueve el pago a EN_PROCESO y delega al Strategy de método de pago.
+        Mueve el pago a EN_PROCESO y delega al Service Layer.
         Retorna el resultado del procesamiento.
         """
-        self._transicionar(self.Estado.EN_PROCESO)
-
-        from pagos.services import PagoService          # import diferido
-        resultado = PagoService.procesar(self)
+        from pagos.services import get_pago_service     # import diferido
+        service = get_pago_service()
+        resultado = service.procesar_pago(self)
         return resultado
 
     def confirmar_pago(self) -> None:
