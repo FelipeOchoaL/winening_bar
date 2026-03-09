@@ -1,5 +1,5 @@
 """
-Service Layer — Orquestación de la lógica de negocio de pagos.
+PagoService — Orquestación de la lógica de negocio de pagos.
 
 PagoService es el punto de entrada para todas las operaciones de pago.
 Implementa Inyección de Dependencias: recibe el procesador de pagos
@@ -17,7 +17,8 @@ import logging
 from typing import TYPE_CHECKING
 
 from pagos.domain.builders import PagoBuilder
-from pagos.infra.factories import ProcesadorPagoBase, ProcesadorPagoFactory
+from pagos.infra.processors import ProcesadorPagoBase
+from pagos.infra.factories import ProcesadorPagoFactory
 
 if TYPE_CHECKING:
     from decimal import Decimal
@@ -130,8 +131,7 @@ class PagoService:
         pago.cancelar_pago()
 
 
-# ── Instancia global para uso simple ─────────────────────────────────
-# Permite usar el servicio sin instanciarlo manualmente en las vistas
+# ── Factory function ─────────────────────────────────────────────────
 
 def get_pago_service(procesador: ProcesadorPagoBase | None = None) -> PagoService:
     """
@@ -144,3 +144,4 @@ def get_pago_service(procesador: ProcesadorPagoBase | None = None) -> PagoServic
         PagoService: Instancia del servicio configurada.
     """
     return PagoService(procesador=procesador)
+
