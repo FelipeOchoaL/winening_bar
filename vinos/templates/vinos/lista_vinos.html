@@ -1,0 +1,40 @@
+{% extends "vinos/base.html" %}
+
+{% block title %}Catálogo de Vinos — Winening{% endblock %}
+
+{% block content %}
+<h1>Catálogo de Vinos</h1>
+<br>
+
+{% if vinos %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Variedad</th>
+                <th>Año</th>
+                <th>Región</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vino in vinos %}
+            <tr>
+                <td><a href="{% url 'vinos:detalle_vino' vino.pk %}">{{ vino.nombre }}</a></td>
+                <td>{{ vino.variedad }}</td>
+                <td>{{ vino.anio }}</td>
+                <td>{{ vino.region }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No hay vinos en el catálogo aún. <a href="{% url 'vinos:crear_vino' %}">Agregar uno</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+
+

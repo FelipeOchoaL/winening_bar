@@ -36,6 +36,14 @@ class Pago(models.Model):
     }
 
     # ── Campos ─────────────────────────────────────────────────────
+    suscripcion = models.ForeignKey(
+        'usuarios.Suscripcion',
+        on_delete=models.SET_NULL,
+        related_name='pagos',
+        null=True,
+        blank=True,
+        help_text='Suscripción que generó este pago (opcional)',
+    )
     monto       = models.DecimalField(max_digits=10, decimal_places=2)
     metodo_pago = models.CharField(
         max_length=20,

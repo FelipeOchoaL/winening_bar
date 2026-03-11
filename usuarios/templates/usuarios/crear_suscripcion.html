@@ -1,0 +1,27 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}Nueva Suscripción — Winening{% endblock %}
+
+{% block content %}
+<h1>Crear Suscripción</h1>
+<p>Para el usuario: <strong>{{ usuario.username }}</strong></p>
+<br>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="tipo">Tipo de Suscripción</label>
+            <select name="tipo" id="tipo">
+                {% for value, label in tipos %}
+                    <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Crear Suscripción</button>
+        <a href="{% url 'usuarios:detalle_usuario' usuario.pk %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
+
+
