@@ -1,0 +1,42 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}Lista de Usuarios — Winening{% endblock %}
+
+{% block content %}
+<h1>Usuarios</h1>
+<br>
+
+{% if usuarios %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Nivel</th>
+                <th>Premium</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td><a href="{% url 'usuarios:detalle_usuario' usuario.pk %}">{{ usuario.username }}</a></td>
+                <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+                <td>{{ usuario.email|default:"-" }}</td>
+                <td><span class="badge badge-{{ usuario.nivel_catador }}">{{ usuario.get_nivel_catador_display }}</span></td>
+                <td>{% if usuario.verificar_acceso_premium %}✅{% else %}❌{% endif %}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No hay usuarios registrados aún. <a href="{% url 'usuarios:crear_usuario' %}">Crear uno</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+
+
