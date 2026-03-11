@@ -1,0 +1,44 @@
+{% extends "vinos/base.html" %}
+
+{% block title %}{{ vino.nombre }} — Winening{% endblock %}
+
+{% block content %}
+<h1>Detalle del Vino</h1>
+<br>
+<div class="card">
+    <table>
+        <tr><th>ID</th><td>{{ vino.pk }}</td></tr>
+        <tr><th>Nombre</th><td>{{ vino.nombre }}</td></tr>
+        <tr><th>Variedad</th><td>{{ vino.variedad }}</td></tr>
+        <tr><th>Año</th><td>{{ vino.anio }}</td></tr>
+        <tr><th>Región</th><td>{{ vino.region }}</td></tr>
+        <tr><th>Creado</th><td>{{ vino.created_at|date:"d/m/Y H:i" }}</td></tr>
+    </table>
+</div>
+
+{% if perfil.total_evaluaciones > 0 %}
+<br>
+<h2>Perfil Sensorial ({{ perfil.total_evaluaciones }} evaluaciones)</h2>
+<br>
+<div class="card">
+    <table>
+        <tr><th>Aroma</th><td>{{ perfil.aroma|floatformat:1 }} / 10</td></tr>
+        <tr><th>Color</th><td>{{ perfil.color|floatformat:1 }} / 10</td></tr>
+        <tr><th>Sabor</th><td>{{ perfil.sabor|floatformat:1 }} / 10</td></tr>
+        <tr><th>Textura</th><td>{{ perfil.textura|floatformat:1 }} / 10</td></tr>
+    </table>
+</div>
+{% else %}
+<br>
+<div class="card">
+    <p>Este vino aún no tiene evaluaciones sensoriales.</p>
+</div>
+{% endif %}
+
+<div style="margin-top:1rem;">
+    <a href="{% url 'vinos:lista_vinos' %}" class="btn btn-secondary">Volver</a>
+</div>
+{% endblock %}
+
+
+

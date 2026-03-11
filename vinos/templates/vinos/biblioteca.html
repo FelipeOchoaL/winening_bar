@@ -1,0 +1,84 @@
+{% extends "vinos/base.html" %}
+
+{% block title %}Biblioteca de {{ usuario.username }} — Winening{% endblock %}
+
+{% block content %}
+<h1>Biblioteca de {{ usuario.username }}</h1>
+<br>
+
+<h2>Mis Vinos</h2>
+<br>
+{% if vinos_biblioteca %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Variedad</th>
+                <th>Año</th>
+                <th>Región</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vino in vinos_biblioteca %}
+            <tr>
+                <td><a href="{% url 'vinos:detalle_vino' vino.pk %}">{{ vino.nombre }}</a></td>
+                <td>{{ vino.variedad }}</td>
+                <td>{{ vino.anio }}</td>
+                <td>{{ vino.region }}</td>
+                <td>
+                    <a href="{% url 'vinos:remover_vino' usuario.pk vino.pk %}" class="btn btn-danger">Remover</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No tienes vinos en tu biblioteca aún.</p>
+</div>
+{% endif %}
+
+<br>
+<h2>Vinos Disponibles para Agregar</h2>
+<br>
+{% if vinos_disponibles %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Variedad</th>
+                <th>Año</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for vino in vinos_disponibles %}
+            <tr>
+                <td>{{ vino.nombre }}</td>
+                <td>{{ vino.variedad }}</td>
+                <td>{{ vino.anio }}</td>
+                <td>
+                    <a href="{% url 'vinos:agregar_vino' usuario.pk vino.pk %}" class="btn btn-success">Agregar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No hay más vinos disponibles para agregar.</p>
+</div>
+{% endif %}
+
+<div style="margin-top:1rem;">
+    <a href="{% url 'usuarios:detalle_usuario' usuario.pk %}" class="btn btn-secondary">Volver al usuario</a>
+</div>
+{% endblock %}
+
+
+

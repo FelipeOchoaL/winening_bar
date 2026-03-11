@@ -1,0 +1,74 @@
+{% extends "usuarios/base.html" %}
+
+{% block title %}{{ usuario.username }} — Winening{% endblock %}
+
+{% block content %}
+<h1>Detalle del Usuario</h1>
+<br>
+<div class="card">
+    <table>
+        <tr><th>ID</th><td>{{ usuario.pk }}</td></tr>
+        <tr><th>Username</th><td>{{ usuario.username }}</td></tr>
+        <tr><th>Nombre</th><td>{{ usuario.first_name }} {{ usuario.last_name }}</td></tr>
+        <tr><th>Email</th><td>{{ usuario.email|default:"-" }}</td></tr>
+        <tr>
+            <th>Nivel Catador</th>
+            <td><span class="badge badge-{{ usuario.nivel_catador }}">{{ usuario.get_nivel_catador_display }}</span></td>
+        </tr>
+        <tr>
+            <th>Acceso Premium</th>
+            <td>{% if usuario.verificar_acceso_premium %}✅ Activo{% else %}❌ Inactivo{% endif %}</td>
+        </tr>
+        <tr><th>Registrado</th><td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td></tr>
+    </table>
+</div>
+
+<div style="margin-top:1rem;">
+    <a href="{% url 'usuarios:crear_suscripcion' usuario.pk %}" class="btn btn-primary">+ Nueva Suscripción</a>
+    <a href="{% url 'usuarios:lista_usuarios' %}" class="btn btn-secondary">Volver</a>
+</div>
+
+<br>
+<h2>Suscripciones</h2>
+<br>
+
+{% if suscripciones %}
+<div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for suscripcion in suscripciones %}
+            <tr>
+                <td>{{ suscripcion.get_tipo_display }}</td>
+                <td>{{ suscripcion.fecha_inicio|date:"d/m/Y" }}</td>
+                <td>{{ suscripcion.fecha_fin|date:"d/m/Y" }}</td>
+                <td><span class="badge badge-{{ suscripcion.estado }}">{{ suscripcion.get_estado_display }}</span></td>
+                <td>
+                    {% if suscripcion.estado == 'activa' %}
+                        <a href="{% url 'usuarios:cancelar_suscripcion' suscripcion.pk %}" class="btn btn-danger">Cancelar</a>
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card">
+    <p>No hay suscripciones. <a href="{% url 'usuarios:crear_suscripcion' usuario.pk %}">Crear una</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+
+

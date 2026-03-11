@@ -1,0 +1,34 @@
+{% extends "vinos/base.html" %}
+
+{% block title %}Nuevo Vino — Winening{% endblock %}
+
+{% block content %}
+<h1>Agregar Vino</h1>
+<br>
+<div class="card">
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="nombre">Nombre del Vino *</label>
+            <input type="text" name="nombre" id="nombre" required>
+        </div>
+        <div class="form-group">
+            <label for="variedad">Variedad *</label>
+            <input type="text" name="variedad" id="variedad" placeholder="ej: Malbec, Cabernet Sauvignon" required>
+        </div>
+        <div class="form-group">
+            <label for="anio">Año de Cosecha *</label>
+            <input type="number" name="anio" id="anio" min="1900" max="2100" required>
+        </div>
+        <div class="form-group">
+            <label for="region">Región *</label>
+            <input type="text" name="region" id="region" placeholder="ej: Mendoza, Valle de Colchagua" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Agregar Vino</button>
+        <a href="{% url 'vinos:lista_vinos' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
+
+
+
