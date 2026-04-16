@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: winening_db
+    environment:
+      POSTGRES_DB: winening
+      POSTGRES_USER: winening_user
+      POSTGRES_PASSWORD: winening_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_web
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      - PAYMENT_PROCESSOR_TYPE=MOCK
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=winening
+      - DB_USER=winening_user
+      - DB_PASSWORD=winening_pass
+      - DB_HOST=db
+      - DB_PORT=5432
+
+  flask_pagos:
+    build:
+      context: ./flask_pagos_service
+      dockerfile: Dockerfile
+    container_name: flask_pagos_service
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./flask_pagos_service:/app
+
+  nginx:
+    image: nginx:alpine
+    container_name: winening_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - django
+      - flask_pagos
+
+volumes:
+  pgdata:
